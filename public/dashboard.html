@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="/js/utils.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Files | SecureShare Vault</title>
+  <meta name="description" content="Personal encrypted file vault and sharing dashboard." />
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <!-- TOP NAVBAR -->
+  <header class="top-navbar">
+    <div class="nav-left">
+      <button class="btn-icon" style="border:none;" aria-label="Menu">
+        <i data-lucide="menu" style="width:20px; height:20px;"></i>
+      </button>
+      <a href="/dashboard.html" class="logo-brand">
+        <div class="logo-square">
+          <i data-lucide="shield" style="width:20px; height:20px;"></i>
+        </div>
+        <span class="logo-text">My Files</span>
+      </a>
+    </div>
+
+    <div class="nav-center">
+      <span class="status-dot"></span>
+      <span style="color:var(--text-primary);">Encrypted Cloud</span>
+      <span style="color:var(--border-strong);">&middot;</span>
+      <span class="vault-tag">Isolated Vault</span>
+    </div>
+
+    <div class="nav-right">
+      <button class="btn btn-primary action-open-upload">
+        <i data-lucide="upload" style="width:16px; height:16px;"></i>
+        <span>Upload File</span>
+      </button>
+
+      <div class="nav-divider"></div>
+
+      <div id="user-avatar" class="avatar" title="Logged in user">U</div>
+
+      <button class="btn-icon action-logout" title="Sign Out">
+        <i data-lucide="log-out" style="width:18px; height:18px;"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- PAGE CONTAINER -->
+  <main class="page-container">
+    <!-- PAGE HEADER -->
+    <div class="page-header-row1">
+      <div class="page-title-group">
+        <h1 class="text-3xl">My Files</h1>
+        <span id="files-count-badge" class="badge-pill">0 files</span>
+      </div>
+
+      <div class="page-actions-group">
+        <button id="btn-refresh-files" class="btn-icon" title="Refresh Vault">
+          <i data-lucide="rotate-cw" style="width:18px; height:18px;"></i>
+        </button>
+        <button class="btn btn-outline" onclick="showToast('Folder organization is automated in your personal isolated root.', 'info')">
+          <i data-lucide="folder-plus" style="width:16px; height:16px;"></i>
+          <span>New Folder</span>
+        </button>
+        <button class="btn btn-primary action-open-upload">
+          <i data-lucide="upload-cloud" style="width:16px; height:16px;"></i>
+          <span>Upload File</span>
+        </button>
+      </div>
+    </div>
+
+    <p class="page-subtitle">Manage your folders and files in your private encrypted vault.</p>
+
+    <!-- TAB ROW & SEARCH -->
+    <div class="tab-search-row">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <a href="/dashboard.html" class="pill-tab">
+          <i data-lucide="home" style="width:16px; height:16px;"></i>
+          <span>My Files</span>
+        </a>
+        <a href="/shares.html" class="pill-tab inactive">
+          <i data-lucide="share-2" style="width:16px; height:16px;"></i>
+          <span>Active Shares</span>
+        </a>
+      </div>
+
+      <div class="search-input-wrapper">
+        <i data-lucide="search"></i>
+        <input type="text" id="file-search-input" class="search-input" placeholder="Search files...">
+      </div>
+    </div>
+
+    <!-- FOLDERS SECTION -->
+    <div style="margin-bottom: 32px;">
+      <div class="section-label">FOLDERS (0)</div>
+      <div class="folders-empty-card">
+        <div class="icon-wrap">
+          <i data-lucide="folder" style="width:48px; height:48px; stroke-width:1.5;"></i>
+        </div>
+        <h4>No folders here</h4>
+        <a onclick="showToast('Subfolder creation will be added in the next vault update.', 'info')">+ Create a new folder</a>
+      </div>
+    </div>
+
+    <!-- FILES TABLE -->
+    <div>
+      <div id="files-section-label" class="section-label">FILES (0)</div>
+      <div class="table-container">
+        <table class="files-table">
+          <thead>
+            <tr>
+              <th>NAME</th>
+              <th class="col-type">TYPE</th>
+              <th class="col-size">SIZE</th>
+              <th>MODIFIED</th>
+              <th>ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody id="files-table-body">
+            <tr>
+              <td colspan="5" class="table-empty-row">
+                <span>Loading your encrypted vault files...</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- BOTTOM NAVBAR (Persistent Dashboard Navigation) -->
+  <nav class="bottom-navbar">
+    <a href="/dashboard.html" class="bottom-nav-item">
+      <i data-lucide="layout-grid" style="width:22px; height:22px;"></i>
+      <span>Overview</span>
+    </a>
+    <a href="/dashboard.html" class="bottom-nav-item active">
+      <i data-lucide="folder" style="width:22px; height:22px;"></i>
+      <span>My Files</span>
+    </a>
+    <a href="/shares.html" class="bottom-nav-item">
+      <i data-lucide="share-2" style="width:22px; height:22px;"></i>
+      <span>Shares</span>
+    </a>
+    <a href="/storage.html" class="bottom-nav-item">
+      <i data-lucide="database" style="width:22px; height:22px;"></i>
+      <span>Storage</span>
+    </a>
+  </nav>
+
+  <!-- UPLOAD MODAL -->
+  <div id="upload-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Upload to Vault</h3>
+        <button id="close-upload-modal" class="modal-close-btn" aria-label="Close">
+          <i data-lucide="x" style="width:20px; height:20px;"></i>
+        </button>
+      </div>
+
+      <div id="file-dropzone" class="dropzone">
+        <i data-lucide="upload-cloud" style="width:44px; height:44px; color:var(--primary); margin:0 auto 12px; display:block;"></i>
+        <h4 style="font-weight:600; margin-bottom:4px;">Drag and drop file here</h4>
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">or click to browse from device</p>
+        <span class="badge-pill">Up to 50 MB per file &bull; Encrypted Storage</span>
+        <input type="file" id="file-picker-input" style="display:none;">
+      </div>
+
+      <div id="upload-progress-container" style="display:none; margin-top:16px;">
+        <div id="upload-status-text" style="font-size:13px; font-weight:500; color:var(--text-primary); margin-bottom:4px;"></div>
+        <div class="progress-bar-container">
+          <div id="upload-progress-bar" class="progress-bar-fill"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHARE LINK MODAL -->
+  <div id="share-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width:500px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Share Secure Link</h3>
+        <button id="close-share-modal" class="modal-close-btn" aria-label="Close">
+          <i data-lucide="x" style="width:20px; height:20px;"></i>
+        </button>
+      </div>
+
+      <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">
+        Sharing: <strong id="share-modal-filename" style="color:var(--text-primary);">filename</strong>
+      </p>
+
+      <!-- Form View -->
+      <form id="share-create-form">
+        <div class="form-group">
+          <label class="form-label" for="share-expiry-select">Expiration Time</label>
+          <select id="share-expiry-select" class="form-select">
+            <option value="1h">1 Hour (High Security)</option>
+            <option value="24h" selected>24 Hours (Recommended)</option>
+            <option value="7d">7 Days</option>
+            <option value="30d">30 Days</option>
+          </select>
+          <div class="form-helper">The link automatically deactivates after this time.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="share-max-downloads">Download Limit (Optional)</label>
+          <input type="number" id="share-max-downloads" class="form-input" placeholder="e.g. 5 (Leave blank for unlimited)" min="1">
+          <div class="form-helper">Link expires after reaching this download threshold.</div>
+        </div>
+
+        <div class="form-group" style="display:flex; align-items:center; gap:10px; margin-top:8px;">
+          <input type="checkbox" id="share-enable-password" style="width:16px; height:16px; cursor:pointer;">
+          <label for="share-enable-password" style="font-size:14px; font-weight:500; cursor:pointer;">Require password to unlock download</label>
+        </div>
+
+        <div id="share-password-field-group" class="form-group" style="display:none;">
+          <label class="form-label" for="share-password-input">Password Protection</label>
+          <input type="password" id="share-password-input" class="form-input" placeholder="Enter link protection password">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%; padding:12px; margin-top:12px;">
+          <i data-lucide="link" style="width:16px; height:16px;"></i>
+          Generate Secure Link
+        </button>
+      </form>
+
+      <!-- Result View -->
+      <div id="share-result-container" style="display:none; text-align:center;">
+        <div style="width:48px; height:48px; border-radius:var(--radius-full); background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; margin:0 auto 12px;">
+          <i data-lucide="check" style="width:24px; height:24px;"></i>
+        </div>
+        <h4 style="font-weight:700; margin-bottom:6px;">Link Generated!</h4>
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">
+          Anyone with this link (and password, if set) can download the file.
+        </p>
+
+        <div class="form-group">
+          <input type="text" id="generated-share-link" class="form-input" readonly style="background:var(--bg-secondary); font-family:monospace; font-size:13px;">
+        </div>
+
+        <div style="display:flex; gap:10px;">
+          <button id="btn-copy-share-link" class="btn btn-primary" style="flex:1;">
+            <i data-lucide="copy" style="width:16px; height:16px;"></i>
+            Copy Link
+          </button>
+          <button id="btn-share-done" class="btn btn-outline">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RENAME MODAL -->
+  <div id="rename-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width:440px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Rename File</h3>
+        <button id="close-rename-modal" class="modal-close-btn" aria-label="Close">
+          <i data-lucide="x" style="width:20px; height:20px;"></i>
+        </button>
+      </div>
+      <form id="rename-form">
+        <div class="form-group">
+          <label class="form-label" for="rename-file-input">File Name</label>
+          <input type="text" id="rename-file-input" class="form-input" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; padding:10px;">
+          Save Changes
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="/js/supabase-client.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/upload.js"></script>
+  <script src="/js/dashboard.js"></script>
+  <script src="/js/share.js"></script>
+  <script>
+    if (window.lucide) window.lucide.createIcons();
+  </script>
+</body>
+</html>

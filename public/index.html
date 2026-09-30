@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SecureShare - Encrypted File Sharing &amp; Vault</title>
+    <meta name="description" content="Secure file sharing platform and personal encrypted file vault with OTP authentication, password protection, and live download expiration." />
+    <meta property="og:title" content="SecureShare - Encrypted File Sharing &amp; Vault" />
+    <meta property="og:description" content="Secure file sharing platform and personal encrypted file vault with OTP authentication, password protection, and live download expiration." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="stylesheet" href="/css/tokens.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body>
+    <!-- Top Navbar -->
+    <header class="top-navbar">
+      <div class="nav-left">
+        <a href="/" class="logo-brand">
+          <div class="logo-square">
+            <i data-lucide="shield" style="width:20px; height:20px;"></i>
+          </div>
+          <span class="logo-text">SecureShare</span>
+        </a>
+      </div>
+
+      <div class="nav-center">
+        <span class="status-dot"></span>
+        <span style="color:var(--text-primary);">Encrypted Cloud</span>
+        <span style="color:var(--border-strong);">&middot;</span>
+        <span class="vault-tag">Isolated Vault</span>
+      </div>
+
+      <div class="nav-right" id="nav-auth-buttons">
+        <a href="/login.html" class="btn btn-outline">Sign In</a>
+        <a href="/register.html" class="btn btn-primary">Create Account</a>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="page-container" style="display:flex; flex-direction:column; align-items:center; text-align:center; padding-top:64px;">
+      <div class="badge-pill blue" style="margin-bottom:20px;">
+        <i data-lucide="lock" style="width:14px; height:14px;"></i>
+        Semester 5 Project &bull; Zero Local Disk Architecture
+      </div>
+
+      <h1 style="font-size:42px; font-weight:800; line-height:1.2; color:var(--text-primary); max-width:760px; margin-bottom:16px;">
+        Personal Encrypted File Vault &amp; Secure Ephemeral Sharing
+      </h1>
+
+      <p style="font-size:16px; color:var(--text-secondary); max-width:620px; margin-bottom:32px; line-height:1.6;">
+        Store files securely in a private Supabase Storage bucket with strict Row Level Security. Share files with time-limited signed URLs, password protection, and live download tracking.
+      </p>
+
+      <div style="display:flex; gap:14px; margin-bottom:48px; flex-wrap:wrap; justify-content:center;">
+        <a href="/dashboard.html" class="btn btn-primary" style="padding:14px 28px; font-size:15px;">
+          <i data-lucide="folder-lock" style="width:18px; height:18px;"></i>
+          Enter Vault
+        </a>
+        <a href="/register.html" class="btn btn-outline" style="padding:14px 28px; font-size:15px;">
+          <i data-lucide="user-plus" style="width:18px; height:18px;"></i>
+          Create Free Account
+        </a>
+      </div>
+
+      <!-- Feature Grid -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:20px; width:100%; max-width:1050px; text-align:left;">
+        <div class="card">
+          <div style="width:40px; height:40px; border-radius:10px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; margin-bottom:14px;">
+            <i data-lucide="key-round" style="width:20px; height:20px;"></i>
+          </div>
+          <h3 style="font-size:16px; font-weight:700; margin-bottom:6px;">6-Digit Gmail OTP</h3>
+          <p style="font-size:13px; color:var(--text-secondary); line-height:1.5;">
+            Live OTP dispatch via Nodemailer + Gmail SMTP. 10-minute expiry, 30s resend cooldown, and bcrypt hash storage.
+          </p>
+        </div>
+
+        <div class="card">
+          <div style="width:40px; height:40px; border-radius:10px; background:#ECFDF5; color:var(--success); display:flex; align-items:center; justify-content:center; margin-bottom:14px;">
+            <i data-lucide="database" style="width:20px; height:20px;"></i>
+          </div>
+          <h3 style="font-size:16px; font-weight:700; margin-bottom:6px;">Zero Local Storage</h3>
+          <p style="font-size:13px; color:var(--text-secondary); line-height:1.5;">
+            Binary file bytes stream straight to private Supabase Storage "vault". Ephemeral serverless execution with no disk residue.
+          </p>
+        </div>
+
+        <div class="card">
+          <div style="width:40px; height:40px; border-radius:10px; background:#EFF6FF; color:var(--primary); display:flex; align-items:center; justify-content:center; margin-bottom:14px;">
+            <i data-lucide="timer" style="width:20px; height:20px;"></i>
+          </div>
+          <h3 style="font-size:16px; font-weight:700; margin-bottom:6px;">Ephemeral Signed URLs</h3>
+          <p style="font-size:13px; color:var(--text-secondary); line-height:1.5;">
+            Share files with custom expiration (1h, 24h, 7d), max download thresholds, optional passwords, and instant revocation.
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <script src="/js/supabase-client.js"></script>
+    <script src="/js/auth.js"></script>
+    <script>
+      if (window.lucide) window.lucide.createIcons();
+      const token = getAuthToken();
+      const user = getCurrentUser();
+      if (token && user) {
+        const navAuth = document.getElementById('nav-auth-buttons');
+        if (navAuth) {
+          navAuth.innerHTML = `
+            <a href="/dashboard.html" class="btn btn-primary">
+              <i data-lucide="layout-grid" style="width:16px; height:16px;"></i>
+              Open Vault
+            </a>
+          `;
+          if (window.lucide) window.lucide.createIcons();
+        }
+      }
+    </script>
+  </body>
+</html>

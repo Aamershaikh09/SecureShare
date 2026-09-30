@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Email OTP | SecureShare</title>
+  <meta name="description" content="Enter your 6-digit one-time passcode to verify your account." />
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="auth-wrapper">
+    <div class="auth-card" style="max-width: 480px;">
+      <!-- Logo -->
+      <div style="display:flex; justify-content:center; align-items:center; gap:10px; margin-bottom:20px;">
+        <div class="logo-square">
+          <i data-lucide="mail-check" style="width:20px; height:20px;"></i>
+        </div>
+        <span style="font-size:20px; font-weight:700; color:var(--text-primary);">SecureShare</span>
+      </div>
+
+      <h1 style="font-size:24px; font-weight:700; margin-bottom:8px;">Check your email</h1>
+      <p style="font-size:14px; color:var(--text-secondary); line-height:1.5;">
+        We sent a 6-digit verification code to<br>
+        <strong id="target-email-display" style="color:var(--text-primary); word-break:break-all;">your email</strong>
+      </p>
+
+      <!-- Live 10-Min Expiry Badge -->
+      <div style="margin-top:12px;">
+        <span id="expiry-timer-display" class="badge-pill blue" style="font-size:12px;">
+          Expires in 10:00
+        </span>
+      </div>
+
+      <!-- 6 Large OTP Boxes -->
+      <div class="otp-container">
+        <input type="text" maxlength="1" class="otp-box" inputmode="numeric" autocomplete="one-time-code">
+        <input type="text" maxlength="1" class="otp-box" inputmode="numeric">
+        <input type="text" maxlength="1" class="otp-box" inputmode="numeric">
+        <input type="text" maxlength="1" class="otp-box" inputmode="numeric">
+        <input type="text" maxlength="1" class="otp-box" inputmode="numeric">
+        <input type="text" maxlength="1" class="otp-box" inputmode="numeric">
+      </div>
+
+      <button id="btn-verify-otp" class="btn btn-primary" style="width:100%; padding:12px; margin-bottom:20px;">
+        <i data-lucide="shield-check" style="width:16px; height:16px;"></i>
+        Verify &amp; Enter Vault
+      </button>
+
+      <div style="font-size:13px; color:var(--text-secondary); display:flex; align-items:center; justify-content:center; gap:6px;">
+        Didn't receive the code?
+        <button id="btn-resend-otp" style="background:none; border:none; color:var(--primary); font-weight:600; cursor:pointer; padding:0;">
+          Resend Code
+        </button>
+        <span id="resend-countdown" style="color:var(--text-muted); font-size:12px;">(Wait 30s)</span>
+      </div>
+
+      <div style="margin-top:20px; font-size:13px;">
+        <a href="/login.html" style="color:var(--text-secondary);">&larr; Back to Login</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="/js/supabase-client.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/verify-otp.js"></script>
+  <script>
+    if (window.lucide) window.lucide.createIcons();
+  </script>
+</body>
+</html>

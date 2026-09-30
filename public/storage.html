@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Storage Vault Quota | SecureShare</title>
+  <meta name="description" content="Encrypted vault storage usage metrics and bucket capacity." />
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <!-- TOP NAVBAR -->
+  <header class="top-navbar">
+    <div class="nav-left">
+      <a href="/dashboard.html" class="btn-icon" style="border:none;" aria-label="Back">
+        <i data-lucide="arrow-left" style="width:20px; height:20px;"></i>
+      </a>
+      <a href="/dashboard.html" class="logo-brand">
+        <div class="logo-square">
+          <i data-lucide="database" style="width:20px; height:20px;"></i>
+        </div>
+        <span class="logo-text">Vault Storage</span>
+      </a>
+    </div>
+
+    <div class="nav-center">
+      <span class="status-dot"></span>
+      <span style="color:var(--text-primary);">Encrypted Cloud</span>
+      <span style="color:var(--border-strong);">&middot;</span>
+      <span class="vault-tag">Isolated Vault</span>
+    </div>
+
+    <div class="nav-right">
+      <a href="/dashboard.html" class="btn btn-outline">
+        <i data-lucide="folder" style="width:16px; height:16px;"></i>
+        <span>My Files</span>
+      </a>
+
+      <div class="nav-divider"></div>
+
+      <div id="user-avatar" class="avatar" title="Logged in user">U</div>
+
+      <button class="btn-icon action-logout" title="Sign Out">
+        <i data-lucide="log-out" style="width:18px; height:18px;"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- PAGE CONTAINER -->
+  <main class="page-container">
+    <!-- PAGE HEADER -->
+    <div class="page-header-row1">
+      <div class="page-title-group">
+        <h1 class="text-3xl">Storage Overview</h1>
+        <span class="badge-pill blue">Supabase "vault"</span>
+      </div>
+    </div>
+
+    <p class="page-subtitle">Real-time breakdown of your encrypted files stored in Supabase Storage.</p>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:24px; margin-bottom:32px;">
+      <!-- Circular Progress Card -->
+      <div class="card" style="text-align:center; padding:36px 24px;">
+        <h3 style="font-size:16px; font-weight:700; margin-bottom:20px;">Capacity Usage</h3>
+
+        <!-- Circular SVG Meter -->
+        <div style="position:relative; width:160px; height:160px; margin:0 auto 20px;">
+          <svg viewBox="0 0 36 36" style="width:100%; height:100%; transform: rotate(-90deg);">
+            <path
+              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              fill="none"
+              stroke="#E5E7EB"
+              stroke-width="3.5"
+            />
+            <path
+              id="storage-circle-fill"
+              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              fill="none"
+              stroke="#2563EB"
+              stroke-width="3.8"
+              stroke-dasharray="0, 100"
+              stroke-linecap="round"
+              style="transition: stroke-dasharray 0.6s ease;"
+            />
+          </svg>
+          <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+            <span id="storage-percentage" style="font-size:26px; font-weight:800; color:var(--text-primary);">0%</span>
+            <span style="font-size:12px; color:var(--text-secondary);">of 500 MB</span>
+          </div>
+        </div>
+
+        <p id="storage-text-summary" style="font-size:14px; color:var(--text-secondary);">
+          Calculating vault metrics...
+        </p>
+      </div>
+
+      <!-- Breakdown Card -->
+      <div class="card" style="padding:32px 28px;">
+        <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;">Storage Category Breakdown</h3>
+
+        <!-- Multi-segment Progress Bar -->
+        <div style="height:12px; border-radius:var(--radius-full); background:var(--bg-tertiary); display:flex; overflow:hidden; margin-bottom:24px;">
+          <div id="bar-docs" style="background:#2563EB; width:0%; transition:width 0.4s ease;" title="Documents"></div>
+          <div id="bar-images" style="background:#10B981; width:0%; transition:width 0.4s ease;" title="Images"></div>
+          <div id="bar-other" style="background:#F59E0B; width:0%; transition:width 0.4s ease;" title="Other Files"></div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="width:12px; height:12px; border-radius:3px; background:#2563EB; display:inline-block;"></span>
+              <span style="font-weight:600;">Documents &amp; PDFs</span>
+            </div>
+            <span id="bytes-docs" style="font-size:13px; color:var(--text-secondary);">0 MB</span>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="width:12px; height:12px; border-radius:3px; background:#10B981; display:inline-block;"></span>
+              <span style="font-weight:600;">Images &amp; Media</span>
+            </div>
+            <span id="bytes-images" style="font-size:13px; color:var(--text-secondary);">0 MB</span>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="width:12px; height:12px; border-radius:3px; background:#F59E0B; display:inline-block;"></span>
+              <span style="font-weight:600;">Archives &amp; Other</span>
+            </div>
+            <span id="bytes-other" style="font-size:13px; color:var(--text-secondary);">0 MB</span>
+          </div>
+        </div>
+
+        <div style="margin-top:28px; padding-top:20px; border-top:1px solid var(--border); font-size:13px; color:var(--text-secondary);">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+            <i data-lucide="shield-check" style="width:16px; height:16px; color:var(--success);"></i>
+            <strong style="color:var(--text-primary);">Zero Local Disk Footprint</strong>
+          </div>
+          Files are streamed directly into the private Supabase "vault" bucket with Row Level Security.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- BOTTOM NAVBAR -->
+  <nav class="bottom-navbar">
+    <a href="/dashboard.html" class="bottom-nav-item">
+      <i data-lucide="layout-grid" style="width:22px; height:22px;"></i>
+      <span>Overview</span>
+    </a>
+    <a href="/dashboard.html" class="bottom-nav-item">
+      <i data-lucide="folder" style="width:22px; height:22px;"></i>
+      <span>My Files</span>
+    </a>
+    <a href="/shares.html" class="bottom-nav-item">
+      <i data-lucide="share-2" style="width:22px; height:22px;"></i>
+      <span>Shares</span>
+    </a>
+    <a href="/storage.html" class="bottom-nav-item active">
+      <i data-lucide="database" style="width:22px; height:22px;"></i>
+      <span>Storage</span>
+    </a>
+  </nav>
+
+  <script src="/js/supabase-client.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!requireAuth()) return;
+      if (window.lucide) window.lucide.createIcons();
+
+      const token = getAuthToken();
+      try {
+        const res = await fetch('/api/list-files', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to fetch storage');
+
+        const stats = data.stats;
+        const totalMb = parseFloat(stats.totalMb);
+        const maxMb = stats.maxStorageMb || 500;
+        const percent = Math.min(100, Math.round((totalMb / maxMb) * 100));
+
+        // Update Circle
+        document.getElementById('storage-percentage').textContent = `${percent}%`;
+        document.getElementById('storage-circle-fill').setAttribute('stroke-dasharray', `${percent}, 100`);
+        document.getElementById('storage-text-summary').innerHTML = `<strong>${stats.totalMb} MB</strong> used of <strong>${maxMb} MB</strong> available`;
+
+        // Breakdown values
+        const toMb = (bytes) => (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+        document.getElementById('bytes-docs').textContent = toMb(stats.docsBytes);
+        document.getElementById('bytes-images').textContent = toMb(stats.imageBytes);
+        document.getElementById('bytes-other').textContent = toMb(stats.otherBytes);
+
+        if (stats.totalBytes > 0) {
+          const docP = ((stats.docsBytes / stats.totalBytes) * 100).toFixed(1);
+          const imgP = ((stats.imageBytes / stats.totalBytes) * 100).toFixed(1);
+          const othP = ((stats.otherBytes / stats.totalBytes) * 100).toFixed(1);
+
+          document.getElementById('bar-docs').style.width = `${docP}%`;
+          document.getElementById('bar-images').style.width = `${imgP}%`;
+          document.getElementById('bar-other').style.width = `${othP}%`;
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Active Shares | SecureShare</title>
+  <meta name="description" content="Manage your active and expired tokenized file sharing links." />
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <!-- TOP NAVBAR -->
+  <header class="top-navbar">
+    <div class="nav-left">
+      <a href="/dashboard.html" class="btn-icon" style="border:none;" aria-label="Back">
+        <i data-lucide="arrow-left" style="width:20px; height:20px;"></i>
+      </a>
+      <a href="/dashboard.html" class="logo-brand">
+        <div class="logo-square">
+          <i data-lucide="shield" style="width:20px; height:20px;"></i>
+        </div>
+        <span class="logo-text">Active Shares</span>
+      </a>
+    </div>
+
+    <div class="nav-center">
+      <span class="status-dot"></span>
+      <span style="color:var(--text-primary);">Encrypted Cloud</span>
+      <span style="color:var(--border-strong);">&middot;</span>
+      <span class="vault-tag">Isolated Vault</span>
+    </div>
+
+    <div class="nav-right">
+      <a href="/dashboard.html" class="btn btn-outline">
+        <i data-lucide="folder" style="width:16px; height:16px;"></i>
+        <span>My Files</span>
+      </a>
+
+      <div class="nav-divider"></div>
+
+      <div id="user-avatar" class="avatar" title="Logged in user">U</div>
+
+      <button class="btn-icon action-logout" title="Sign Out">
+        <i data-lucide="log-out" style="width:18px; height:18px;"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- PAGE CONTAINER -->
+  <main class="page-container">
+    <!-- PAGE HEADER -->
+    <div class="page-header-row1">
+      <div class="page-title-group">
+        <h1 class="text-3xl">Shared Links</h1>
+        <span id="shares-count-badge" class="badge-pill">0 shares</span>
+      </div>
+
+      <div class="page-actions-group">
+        <a href="/dashboard.html" class="btn btn-primary">
+          <i data-lucide="plus" style="width:16px; height:16px;"></i>
+          <span>New Share</span>
+        </a>
+      </div>
+    </div>
+
+    <p class="page-subtitle">Track, copy, and immediately revoke active public download links.</p>
+
+    <!-- TAB ROW -->
+    <div class="tab-search-row">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <a href="/dashboard.html" class="pill-tab inactive">
+          <i data-lucide="home" style="width:16px; height:16px;"></i>
+          <span>My Files</span>
+        </a>
+        <a href="/shares.html" class="pill-tab">
+          <i data-lucide="share-2" style="width:16px; height:16px;"></i>
+          <span>Active Shares</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- SHARES TABLE -->
+    <div class="table-container">
+      <table class="files-table">
+        <thead>
+          <tr>
+            <th>FILE</th>
+            <th>LINK</th>
+            <th>PASSWORD</th>
+            <th>EXPIRES</th>
+            <th>DOWNLOADS</th>
+            <th>ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody id="shares-table-body">
+          <tr>
+            <td colspan="6" class="table-empty-row">
+              <span>Loading your active shares...</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- BOTTOM NAVBAR -->
+  <nav class="bottom-navbar">
+    <a href="/dashboard.html" class="bottom-nav-item">
+      <i data-lucide="layout-grid" style="width:22px; height:22px;"></i>
+      <span>Overview</span>
+    </a>
+    <a href="/dashboard.html" class="bottom-nav-item">
+      <i data-lucide="folder" style="width:22px; height:22px;"></i>
+      <span>My Files</span>
+    </a>
+    <a href="/shares.html" class="bottom-nav-item active">
+      <i data-lucide="share-2" style="width:22px; height:22px;"></i>
+      <span>Shares</span>
+    </a>
+    <a href="/storage.html" class="bottom-nav-item">
+      <i data-lucide="database" style="width:22px; height:22px;"></i>
+      <span>Storage</span>
+    </a>
+  </nav>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="/js/supabase-client.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/utils.js"></script>
+  <script src="/js/share.js"></script>
+  <script>
+    if (window.lucide) window.lucide.createIcons();
+  </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | SecureShare</title>
+  <meta name="description" content="Sign in to your private SecureShare encrypted vault." />
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <!-- Logo -->
+      <div style="display:flex; justify-content:center; align-items:center; gap:10px; margin-bottom:24px;">
+        <div class="logo-square">
+          <i data-lucide="shield" style="width:20px; height:20px;"></i>
+        </div>
+        <span style="font-size:20px; font-weight:700; color:var(--text-primary);">SecureShare</span>
+      </div>
+
+      <h1 style="font-size:24px; font-weight:700; margin-bottom:6px;">Welcome back</h1>
+      <p style="font-size:14px; color:var(--text-secondary); margin-bottom:28px;">
+        Access your private encrypted vault &amp; active shares.
+      </p>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" id="email" class="form-input" placeholder="alex@university.edu" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" class="form-input" placeholder="Your account password" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%; padding:12px; margin-top:8px;">
+          <i data-lucide="log-in" style="width:16px; height:16px;"></i>
+          Sign In to Vault
+        </button>
+      </form>
+
+      <div style="margin-top:24px; font-size:13px; color:var(--text-secondary);">
+        Need an account? <a href="/register.html" style="font-weight:600;">Create Account</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="/js/supabase-client.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    if (window.lucide) window.lucide.createIcons();
+  </script>
+</body>
+</html>

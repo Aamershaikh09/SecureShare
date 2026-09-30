@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account | SecureShare</title>
+  <meta name="description" content="Register for SecureShare encrypted vault and file sharing platform." />
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Lucide Icons via CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <!-- Logo -->
+      <div style="display:flex; justify-content:center; align-items:center; gap:10px; margin-bottom:24px;">
+        <div class="logo-square">
+          <i data-lucide="shield" style="width:20px; height:20px;"></i>
+        </div>
+        <span style="font-size:20px; font-weight:700; color:var(--text-primary);">SecureShare</span>
+      </div>
+
+      <h1 style="font-size:24px; font-weight:700; margin-bottom:6px;">Create your account</h1>
+      <p style="font-size:14px; color:var(--text-secondary); margin-bottom:28px;">
+        End-to-end encrypted storage & secure file sharing.
+      </p>
+
+      <form id="register-form">
+        <div class="form-group">
+          <label class="form-label" for="full_name">Full Name</label>
+          <input type="text" id="full_name" class="form-input" placeholder="e.g. Alex Morgan" required autocomplete="name">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" id="email" class="form-input" placeholder="alex@university.edu" required autocomplete="email">
+          <div class="form-helper">A live 6-digit OTP will be dispatched via Gmail SMTP.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Master Password</label>
+          <input type="password" id="password" class="form-input" placeholder="Minimum 8 characters" required minlength="8" autocomplete="new-password">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%; padding:12px; margin-top:8px;">
+          <i data-lucide="arrow-right" style="width:16px; height:16px;"></i>
+          Continue with Email OTP
+        </button>
+      </form>
+
+      <div style="margin-top:24px; font-size:13px; color:var(--text-secondary);">
+        Already have an account? <a href="/login.html" style="font-weight:600;">Sign In</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="/js/supabase-client.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    if (window.lucide) window.lucide.createIcons();
+  </script>
+</body>
+</html>

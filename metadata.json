@@ -1,0 +1,6 @@
+{
+  "name": "SecureShare - Encrypted File Sharing & Vault",
+  "description": "Secure file sharing platform and personal encrypted file vault with OTP authentication, password protection, and live download expiration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

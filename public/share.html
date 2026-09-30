@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="/js/utils.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download Shared File | SecureShare</title>
+  <meta name="description" content="Secure file download powered by SecureShare encrypted vault." />
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body style="background-color: var(--bg-secondary);">
+  <!-- Minimal Top Header -->
+  <header style="height:64px; background:#FFFFFF; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 32px;">
+    <a href="/" class="logo-brand">
+      <div class="logo-square">
+        <i data-lucide="shield" style="width:20px; height:20px;"></i>
+      </div>
+      <span class="logo-text">SecureShare</span>
+    </a>
+
+    <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-secondary);">
+      <span class="status-dot"></span>
+      <span>Encrypted Transmission</span>
+    </div>
+  </header>
+
+  <!-- Centered Content Area -->
+  <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:40px 20px;">
+    <div id="public-share-view" style="width:100%; max-width:500px;">
+      <div class="card" style="text-align:center; padding:40px 24px;">
+        <i data-lucide="loader" style="width:36px; height:36px; color:var(--primary); animation:spin 1s linear infinite; margin:0 auto 16px;"></i>
+        <h3 style="font-size:18px; font-weight:600; color:var(--text-primary); margin-bottom:6px;">Verifying Secure Link...</h3>
+        <p style="font-size:13px; color:var(--text-secondary);">Validating cryptographic token and permissions.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <style>
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+
+  <script src="/js/supabase-client.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/share.js"></script>
+  <script>
+    if (window.lucide) window.lucide.createIcons();
+  </script>
+</body>
+</html>

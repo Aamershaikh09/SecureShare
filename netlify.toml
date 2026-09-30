@@ -1,0 +1,41 @@
+# netlify.toml
+# Netlify Configuration for SecureShare
+
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Clean Upload Route: Redirect /api/upload to the save-file serverless function
+[[redirects]]
+  from = "/api/upload"
+  to = "/.netlify/functions/save-file"
+  status = 200
+
+# Proxy all /api/* requests to Netlify serverless functions in netlify/functions/
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# Public share token viewer route: /share/:token -> /share.html
+[[redirects]]
+  from = "/share/:token"
+  to = "/share.html"
+  status = 200
+
+# SPA fallback for /share
+[[redirects]]
+  from = "/share"
+  to = "/share.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
