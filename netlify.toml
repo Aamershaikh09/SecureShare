@@ -1,7 +1,8 @@
-# netlify.toml
-# Netlify Configuration for SecureShare
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "SMTP_FROM,SUPABASE_STORAGE_BUCKET,SUPABASE_URL"
 
 [build]
+  command = "npm run build"
   publish = "public"
   functions = "netlify/functions"
 
@@ -9,25 +10,21 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
-# Clean Upload Route: Redirect /api/upload to the save-file serverless function
 [[redirects]]
   from = "/api/upload"
   to = "/.netlify/functions/save-file"
   status = 200
 
-# Proxy all /api/* requests to Netlify serverless functions in netlify/functions/
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
 
-# Public share token viewer route: /share/:token -> /share.html
 [[redirects]]
   from = "/share/:token"
   to = "/share.html"
   status = 200
 
-# SPA fallback for /share
 [[redirects]]
   from = "/share"
   to = "/share.html"
