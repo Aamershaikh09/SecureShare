@@ -93,24 +93,6 @@ secureshare/
 Create a `.env` file in the root directory:
 
 ```env
-SESSION_SECRET="secureshare-super-secret-jwt-key-change-in-production-2026"
-
-SUPABASE_PROJECT_ID="nlqdkbowymyrlotmpinh"
-SUPABASE_URL="https://nlqdkbowymyrlotmpinh.supabase.co"
-SUPABASE_KEY="sb_publishable_dfYKnruS31FXXcGdJgOw2w_3K0HDgmo"
-SUPABASE_SERVICE_ROLE_KEY="<Paste your secret Service Role Key from Supabase Project Settings -> API>"
-SUPABASE_STORAGE_BUCKET="vault"
-
-MAX_FILE_SIZE_MB=50
-
-SMTP_HOST="smtp.gmail.com"
-SMTP_PORT=587
-SMTP_USER="ey0955015@gmail.com"
-SMTP_PASSWORD="ixig wraw mtpe atff"
-SMTP_FROM="SecureShare <ey0955015@gmail.com>"
-
-APP_URL="http://localhost:3000"
-```
 
 > **Security Reminder:** The `SUPABASE_SERVICE_ROLE_KEY` has administrative privileges to bypass RLS for server-side operations and should **never** be exposed to frontend JavaScript.
 
