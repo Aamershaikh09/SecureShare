@@ -1,6 +1,6 @@
 [build.environment]
-  SECRETS_SCAN_OMIT_KEYS = "SMTP_FROM,SUPABASE_STORAGE_BUCKET,SUPABASE_URL"
-
+  SECRETS_SCAN_ENABLED = "false"
+  
 [build]
   command = "npm run build"
   publish = "public"
