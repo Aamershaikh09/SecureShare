@@ -2,7 +2,7 @@
   "name": "secureshare",
   "private": true,
   "version": "1.0.0",
-  "type": "module",
+  
   "scripts": {
     "dev": "tsx server.ts",
     "build": "vite build",
