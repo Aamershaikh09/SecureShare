@@ -1,10 +1,11 @@
 /**
  * SecureShare Nodemailer Transport Configuration
- * 
+ *
  * Optimized for Serverless & Netlify Functions:
  * 1. Force IPv4 (family: 4) to avoid Netlify IPv6 route drops
  * 2. Explicit connection/greeting/socket timeouts to avoid 10s Netlify function kill
- * 3. Connection pooling (pool: true) for efficient connection reuse
+ * 3. Lazy-initialized transporter — created on first use, not at module load
+ *    (prevents Netlify cold-start hangs that cause "HandlerNotFound" errors)
  * 4. Human-readable error diagnostic logging for SMTP error codes
  */
 
@@ -18,27 +19,35 @@ const SMTP_USER = process.env.SMTP_USER || '';
 const SMTP_PASSWORD = (process.env.SMTP_PASSWORD || '').replace(/\s+/g, '');
 const SMTP_FROM = process.env.SMTP_FROM || `SecureShare <${SMTP_USER || 'noreply@secureshare.local'}>`;
 
-console.log('[SecureShare Mailer] Stage: Creating transport (IPv4 forced, port: 587, pool: true)');
+// Lazy-initialized transporter (created on first use, not at module load)
+let _transporter = null;
 
-// Initialize reusable transporter with pooling, explicit timeouts, and IPv4
-const transporter = nodemailer.createTransport({
-  pool: true,
-  host: SMTP_HOST,
-  port: SMTP_PORT,
-  secure: false, // false for port 587 (STARTTLS)
-  requireTLS: true,
-  family: 4, // CRITICAL: Force IPv4. Prevents Netlify from hanging on Gmail IPv6 addresses!
-  auth: {
-    user: SMTP_USER,
-    pass: SMTP_PASSWORD
-  },
-  connectionTimeout: 10000, // 10s connection timeout
-  greetingTimeout: 5000,    // 5s server greeting timeout
-  socketTimeout: 10000,     // 10s socket inactivity timeout
-  tls: {
-    rejectUnauthorized: false
-  }
-});
+function getTransporter() {
+  if (_transporter) return _transporter;
+
+  console.log('[SecureShare Mailer] Stage: Creating transport (IPv4 forced, port: 587, pool: false)');
+
+  _transporter = nodemailer.createTransport({
+    pool: false,              // Don't eagerly open connections on cold start
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    secure: false,            // false for port 587 (STARTTLS)
+    requireTLS: true,
+    family: 4,                // Force IPv4 — prevents Netlify from hanging on Gmail IPv6
+    auth: {
+      user: SMTP_USER,
+      pass: SMTP_PASSWORD
+    },
+    connectionTimeout: 8000,  // 8s connection timeout
+    greetingTimeout: 5000,    // 5s server greeting timeout
+    socketTimeout: 10000,     // 10s socket inactivity timeout
+    tls: {
+      rejectUnauthorized: false
+    }
+  });
+
+  return _transporter;
+}
 
 /**
  * Maps common Nodemailer / SMTP errors to actionable human-readable explanations
@@ -70,31 +79,32 @@ function explainSmtpError(error) {
 }
 
 /**
- * Verify transporter connection on startup or diagnostic checks
+ * Verify transporter connection on demand
  */
 async function verifyTransport() {
   if (!SMTP_USER || !SMTP_PASSWORD) {
     console.warn('[SecureShare Mailer] Warning: SMTP_USER or SMTP_PASSWORD is not set in environment.');
-    return { 
-      success: false, 
-      error: 'SMTP credentials missing from environment variables (SMTP_USER or SMTP_PASSWORD empty).' 
+    return {
+      success: false,
+      error: 'SMTP credentials missing from environment variables (SMTP_USER or SMTP_PASSWORD empty).'
     };
   }
 
   console.log('[SecureShare Mailer] Stage: Verifying SMTP connection to ' + SMTP_HOST + ':' + SMTP_PORT + ' (IPv4)...');
 
   try {
-    await transporter.verify();
+    const t = getTransporter();
+    await t.verify();
     console.log('[SecureShare Mailer] Stage: SMTP verified OK - Gmail connection active and authorized.');
     return { success: true };
   } catch (error) {
     const explanation = explainSmtpError(error);
     console.error('[SecureShare Mailer] SMTP verification failed:\n-> ' + explanation);
-    return { 
-      success: false, 
-      error: explanation, 
-      rawCode: error.code, 
-      rawMessage: error.message 
+    return {
+      success: false,
+      error: explanation,
+      rawCode: error.code,
+      rawMessage: error.message
     };
   }
 }
@@ -121,7 +131,8 @@ async function sendMail({ to, subject, html, text }) {
   };
 
   try {
-    const info = await transporter.sendMail(mailOptions);
+    const t = getTransporter();
+    const info = await t.sendMail(mailOptions);
     console.log(`[SecureShare Mailer] Stage: Mail sent OK (MessageId: ${info.messageId})`);
     return { success: true, messageId: info.messageId, response: info.response };
   } catch (error) {
@@ -135,7 +146,7 @@ async function sendMail({ to, subject, html, text }) {
 }
 
 module.exports = {
-  transporter,
+  getTransporter,
   verifyTransport,
   sendMail,
   explainSmtpError,
